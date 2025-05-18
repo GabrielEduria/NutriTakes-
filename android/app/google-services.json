@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "664601172520",
+    "project_id": "nutritakes-619a2",
+    "storage_bucket": "nutritakes-619a2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664601172520:android:7c87ed90156a04a5a1331d",
+        "android_client_info": {
+          "package_name": "com.example.csth_nutritakes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKEwqxbENLNdE6CKzXnPQeM88OLHoQlOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
