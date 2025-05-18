@@ -11,6 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+<<<<<<< HEAD
   shared_preferences: ^2.0.15
 
     
@@ -19,6 +20,9 @@ dependencies:
   firebase_core: ^3.9.0  
   cloud_firestore: ^5.6.7
   carousel_slider: ^4.2.1
+=======
+  
+>>>>>>> 55a281068f42bc3c2d31d78d4b50483e8c7731e7
   # Core packages
   tflite_flutter: ^0.11.0       # Modern TFLite plugin
   camera: ^0.11.1             # Camera access
@@ -32,6 +36,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+<<<<<<< HEAD
   flutter_launcher_icons: ^0.13.1
 
 flutter_icons:
@@ -39,11 +44,17 @@ flutter_icons:
   ios: true
   image_path: "assets/images/icon/NT.png"
   
+=======
+>>>>>>> 55a281068f42bc3c2d31d78d4b50483e8c7731e7
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/models/model_unquant.tflite
+<<<<<<< HEAD
     - assets/models/labels.txt
     - assets/images/icon/NT.png
+=======
+    - assets/models/labels.txt
+>>>>>>> 55a281068f42bc3c2d31d78d4b50483e8c7731e7

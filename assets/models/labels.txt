@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Breaded_pork 
 bistek 
 chicken adobo 
@@ -9,3 +10,13 @@ lechon_kawali
 takoyaki 
 tilapia 
 yellow_rice
+=======
+baklava
+carrot_cake
+churros
+grilled_salmon
+guacamole
+lasagna
+oysters
+ramen
+>>>>>>> 55a281068f42bc3c2d31d78d4b50483e8c7731e7
