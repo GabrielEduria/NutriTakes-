@@ -138,7 +138,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
                   child: const Text(
                     'Back to Login',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ],
