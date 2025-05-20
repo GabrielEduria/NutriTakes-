@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // <-- Added for Firestore
 import '../services/auth_service.dart';
 import '../widgets/classification_history_card.dart';
 import '../utils/classification_storage.dart';
@@ -23,12 +24,74 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final storage = ClassificationStorage();
   final AuthService _authService = AuthService();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Firestore instance
 
   File? _profileImage;
 
   Future<void> _changeProfileImage() async {
     // TODO: implement image picker logic here, for example using image_picker package
     // After picking, call setState to update _profileImage
+  }
+
+  void _showFeedbackDialog(BuildContext context, String predictedLabel) {
+    final TextEditingController _feedbackController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Submit Feedback'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Predicted Label: $predictedLabel'),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _feedbackController,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                  labelText: 'Your feedback',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.pop(context),
+            ),
+            ElevatedButton(
+              child: const Text('Submit'),
+              onPressed: () async {
+                String feedback = _feedbackController.text.trim();
+
+                if (feedback.isNotEmpty) {
+                  try {
+                    await _firestore.collection('feedback').add({
+                      'userEmail': widget.email,
+                      'predictedLabel': predictedLabel,
+                      'feedback': feedback,
+                      'timestamp': FieldValue.serverTimestamp(),
+                    });
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Feedback submitted successfully!')),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error submitting feedback: $e')),
+                    );
+                  }
+                }
+
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -149,6 +212,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   });
                                 },
                                 onTap: () {},
+                                onFeedback: () {
+                                  _showFeedbackDialog(context, item['label'] ?? 'Unknown');
+                                },
                               );
                             },
                           ),

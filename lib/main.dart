@@ -13,7 +13,7 @@ void main() async {
 
   // Initialize Firebase before anything else
   await Firebase.initializeApp();
-
+  
   // Get the available cameras on the device
   final cameras = await availableCameras();
 
@@ -23,9 +23,9 @@ void main() async {
 
 class NutriTakesApp extends StatelessWidget {
   final List<CameraDescription> cameras;
-  final AuthService _authService = AuthService(); // Create auth service after Firebase init
+  final AuthService _authService = AuthService();
 
-  NutriTakesApp({super.key, required this.cameras});
+  NutriTakesApp({Key? key, required this.cameras}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

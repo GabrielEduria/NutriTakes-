@@ -7,7 +7,7 @@ class ClassificationHistoryCard extends StatelessWidget {
   final int index;
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
-
+  final VoidCallback? onFeedback; // Add this at the top with the other fields
   const ClassificationHistoryCard({
     Key? key,
     required this.imageFile,
@@ -15,6 +15,7 @@ class ClassificationHistoryCard extends StatelessWidget {
     required this.index,
     this.onTap,
     this.onDelete,
+    this.onFeedback,
   }) : super(key: key);
 
   @override
@@ -55,18 +56,25 @@ class ClassificationHistoryCard extends StatelessWidget {
                 style: TextStyle(fontSize: 13, color: Colors.grey[600]),
               ),
               const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.delete_outline, color: Colors.red),
-                    onPressed: onDelete,
-                    tooltip: 'Delete',
-                  ),
-                  const SizedBox(width: 16),
-                  Icon(Icons.info_outline, size: 18, color: Colors.grey),
-                ],
-              ),
+             Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    IconButton(
+      icon: const Icon(Icons.delete_outline, color: Colors.red),
+      onPressed: onDelete,
+      tooltip: 'Delete',
+    ),
+    const SizedBox(width: 16),
+    if (onFeedback != null) 
+      IconButton(
+        icon: const Icon(Icons.feedback_outlined, color: Colors.orange),
+        onPressed: onFeedback,
+        tooltip: 'Submit Feedback',
+      ),
+  ],
+),
+
+
             ],
           ),
         ),

@@ -127,7 +127,6 @@ class _MainNavScreenState extends State<MainNavScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Latest image + classification
     File? latestImage = _pickedImages.isNotEmpty ? _pickedImages.last : null;
     String? latestLabel = _classificationHistory.isNotEmpty
         ? _classificationHistory.last['label']
@@ -149,38 +148,72 @@ class _MainNavScreenState extends State<MainNavScreen> {
           if (latestImage != null && latestLabel != null)
             Center(
               child: Card(
-                elevation: 8,
+                elevation: 12,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
-                margin: const EdgeInsets.symmetric(horizontal: 40),
-                child: Padding(
+                margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    gradient: LinearGradient(
+                      colors: [Colors.orange.shade50, Colors.orange.shade100],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
-                        child: Image.file(
-                          latestImage,
-                          width: 250,
-                          height: 250,
-                          fit: BoxFit.cover,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 8,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Image.file(
+                            latestImage,
+                            width: 260,
+                            height: 260,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       Text(
                         latestLabel,
                         style: const TextStyle(
-                          fontSize: 26,
+                          fontSize: 28,
                           fontWeight: FontWeight.bold,
+                          color: Colors.deepOrange,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'Confidence: ${latestConfidence?.toStringAsFixed(2) ?? 'N/A'}%',
-                        style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[800],
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: LinearProgressIndicator(
+                          value: (latestConfidence ?? 0) / 100,
+                          minHeight: 12,
+                          backgroundColor: Colors.orange.shade200,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrange),
+                        ),
                       ),
                     ],
                   ),
@@ -188,18 +221,30 @@ class _MainNavScreenState extends State<MainNavScreen> {
               ),
             )
           else
-           Center(
+            Center(
   child: Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 50),
-    child: Text(
-      'No image classified yet.\nCapture or select an image to start.',
-      textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        Icon(Icons.fastfood, size: 100, color: Colors.orange),
+        SizedBox(height: 20),
+        Text(
+          'No classification yet.\nTap the button below to get started!',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.grey,
+          ),
+        ),
+      ],
     ),
   ),
 ),
 
-          const SizedBox(height: 80), // spacer to push button down
+          const SizedBox(height: 80),
+        
         ],
       ),
       bottomNavigationBar: Padding(
