@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../services/image_classifier.dart'; // Import your classifier
+import '../services/image_classifier.dart'; // Your classifier import
 
 class MainNavScreen extends StatefulWidget {
   final String email;
@@ -92,7 +92,10 @@ class _MainNavScreenState extends State<MainNavScreen> {
         final result = await _classifier.classifyImage(imageFile);
 
         final label = result.split(' (')[0];
-        final confidenceStr = result.split(' (')[1].replaceAll('%', '').replaceAll(')', '');
+        final confidenceStr = result
+            .split(' (')[1]
+            .replaceAll('%', '')
+            .replaceAll(')', '');
         final confidence = double.tryParse(confidenceStr) ?? 0.0;
 
         _addClassification({'label': label, 'confidence': confidence}, imageFile);
@@ -124,6 +127,15 @@ class _MainNavScreenState extends State<MainNavScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Latest image + classification
+    File? latestImage = _pickedImages.isNotEmpty ? _pickedImages.last : null;
+    String? latestLabel = _classificationHistory.isNotEmpty
+        ? _classificationHistory.last['label']
+        : null;
+    double? latestConfidence = _classificationHistory.isNotEmpty
+        ? _classificationHistory.last['confidence']
+        : null;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('NutriTakes'),
@@ -131,71 +143,79 @@ class _MainNavScreenState extends State<MainNavScreen> {
         backgroundColor: Colors.orange[600],
         foregroundColor: Colors.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            ElevatedButton.icon(
-              onPressed: _showImageSourceSelector,
-              icon: const Icon(Icons.camera_alt),
-              label: const Text('Capture & Classify'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange[600],
-                foregroundColor: Colors.white,
-                minimumSize: const Size.fromHeight(50),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (latestImage != null && latestLabel != null)
+            Center(
+              child: Card(
+                elevation: 8,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 40),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.file(
+                          latestImage,
+                          width: 250,
+                          height: 250,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        latestLabel,
+                        style: const TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Confidence: ${latestConfidence?.toStringAsFixed(2) ?? 'N/A'}%',
+                        style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: _classificationHistory.isEmpty
-                  ? Center(
-                      child: Text(
-                        'No classifications yet.\nStart by capturing an image.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey[600], fontSize: 16),
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: _classificationHistory.length,
-                      itemBuilder: (context, index) {
-                        final classification = _classificationHistory[index];
-                        final imageFile = (index < _pickedImages.length) ? _pickedImages[index] : null;
+            )
+          else
+           Center(
+  child: Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 50),
+    child: Text(
+      'No image classified yet.\nCapture or select an image to start.',
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+    ),
+  ),
+),
 
-                        return Card(
-                          margin: const EdgeInsets.symmetric(vertical: 8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 4,
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(12),
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: imageFile != null && imageFile.existsSync()
-                                  ? Image.file(imageFile, width: 60, height: 60, fit: BoxFit.cover)
-                                  : Container(
-                                      width: 60,
-                                      height: 60,
-                                      color: Colors.grey[300],
-                                      child: const Icon(Icons.image_not_supported),
-                                    ),
-                            ),
-                            title: Text(
-                              classification['label'] ?? 'Unknown',
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text(
-                              'Confidence: ${(classification['confidence'] ?? 'N/A').toString()}%',
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+          const SizedBox(height: 80), // spacer to push button down
+        ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16),
+        child: ElevatedButton.icon(
+          onPressed: _showImageSourceSelector,
+          icon: const Icon(Icons.camera_alt),
+          label: const Text('Capture & Classify'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.orange[600],
+            foregroundColor: Colors.white,
+            minimumSize: const Size.fromHeight(50),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-          ],
+          ),
         ),
       ),
     );

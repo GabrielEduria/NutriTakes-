@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
-import '../widgets/Main_Nav_Screen.dart';
+import '../widgets/BottomNavigationBar.dart';
 
 class LoginScreen extends StatefulWidget {
   final AuthService authService;
@@ -64,16 +64,10 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => MainNavScreen(
+            builder: (context) => BottomNav(
               email: email,
                classificationHistory: [],  
-                  pickedImages: [],  
-                   onClassificationDataUpdate: ({
-                     required List<Map<String, dynamic>> updatedHistory,
-  required List<File> updatedImages,
-                   })  {
-  
-                   }  // initialize empty or pass actual data
+               pickedImages: [],
             ),
           ),
         );
