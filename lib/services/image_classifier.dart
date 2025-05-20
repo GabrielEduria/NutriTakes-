@@ -11,19 +11,11 @@ class ImageClassifier {
 
   Future<void> loadModel() async {
     try {
-      // Load model
+      // Load model with basic options
       _interpreter = await Interpreter.fromAsset(
         'assets/models/model_unquant.tflite',
-        options: InterpreterOptions()..threads = 4,
+        options: InterpreterOptions()..threads = 4, // Removed GPU delegate
       );
-
-      // Verify model input/output
-      final inputTensors = _interpreter.getInputTensors();
-      final outputTensors = _interpreter.getOutputTensors();
-
-      if (inputTensors.isEmpty || outputTensors.isEmpty) {
-        throw Exception('Invalid model - missing input/output tensors');
-      }
 
       // Load labels
       _labels =
@@ -79,8 +71,6 @@ class ImageClassifier {
     for (var y = 0; y < inputSize; y++) {
       for (var x = 0; x < inputSize; x++) {
         final pixel = image.getPixel(x, y);
-
-        // Normalize and add to buffer (RGB order)
         inputBuffer[bufferIndex++] = (pixel.r - mean) / std;
         inputBuffer[bufferIndex++] = (pixel.g - mean) / std;
         inputBuffer[bufferIndex++] = (pixel.b - mean) / std;
@@ -90,23 +80,18 @@ class ImageClassifier {
   }
 
   List<dynamic> _runInference(Float32List input) {
-    // Get output shape from model
     final outputShape = _interpreter.getOutputTensor(0).shape;
     final output = List.filled(
       outputShape.reduce((a, b) => a * b),
       0.0,
     ).reshape(outputShape);
 
-    // Run inference
     _interpreter.run(input.reshape([1, 224, 224, 3]), output);
     return output;
   }
 
   String _processOutput(List<dynamic> output) {
-    // Convert output to List<double>
     final probabilities = output[0].cast<double>();
-
-    // Find max probability
     double maxScore = 0;
     int maxIndex = 0;
     for (int i = 0; i < probabilities.length; i++) {
@@ -116,13 +101,12 @@ class ImageClassifier {
       }
     }
 
-    // Return formatted result
     final confidence = (maxScore * 100).toStringAsFixed(1);
     return '${_labels[maxIndex]} ($confidence%)';
   }
 
   void dispose() {
-    _interpreter?.close();
+    _interpreter.close();
     _isInitialized = false;
   }
 }

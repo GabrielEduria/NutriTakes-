@@ -137,6 +137,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
 
     return Scaffold(
       appBar: AppBar(
+          automaticallyImplyLeading: false,
         title: const Text('NutriTakes'),
         centerTitle: true,
         backgroundColor: Colors.orange[600],

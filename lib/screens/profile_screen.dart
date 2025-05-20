@@ -29,8 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   File? _profileImage;
 
   Future<void> _changeProfileImage() async {
-    // TODO: implement image picker logic here, for example using image_picker package
-    // After picking, call setState to update _profileImage
+
   }
 
   void _showFeedbackDialog(BuildContext context, String predictedLabel) {
@@ -105,19 +104,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           // Orange header with 'Profile' text
           Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 24),
-            color: Colors.orange,
-            child: const Center(
-              child: Text(
-                'Profile',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                ),
-              ),
-            ),
-          ),
+  width: double.infinity,
+  color: Colors.orange,
+  child: const Center(
+    child: Padding(
+      padding: EdgeInsets.all(24),
+      child: Text(
+        'Profile',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 22,
+        ),
+      ),
+    ),
+  ),
+),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
