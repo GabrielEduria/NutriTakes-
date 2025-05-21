@@ -3,7 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
-
+import 'package:camera/camera.dart'; // changes
+//changes
 class ImageClassifier {
   late Interpreter _interpreter;
   late List<String> _labels;
@@ -59,7 +60,46 @@ class ImageClassifier {
       throw Exception('Classification failed: $e');
     }
   }
+  // below is the changes
+  Future<String> classifyCameraImage(CameraImage cameraImage) async {
+  if (!_isInitialized) throw Exception("Model not loaded");
 
+  final img.Image image = _convertYUV420toImage(cameraImage);
+  final resizedImage = img.copyResize(image, width: 224, height: 224);
+  final input = _prepareInput(resizedImage);
+  final output = _runInference(input);
+  return _processOutput(output);
+}
+
+img.Image _convertYUV420toImage(CameraImage image) {
+  final width = image.width;
+  final height = image.height;
+  final img.Image imgBuffer = img.Image(width: width, height: height);
+
+  final uvRowStride = image.planes[1].bytesPerRow;
+  final uvPixelStride = image.planes[1].bytesPerPixel!;
+
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      final uvIndex = uvPixelStride * (x ~/ 2) + uvRowStride * (y ~/ 2);
+      final u = image.planes[1].bytes[uvIndex];
+      final v = image.planes[2].bytes[uvIndex];
+      final yVal = image.planes[0].bytes[y * width + x];
+
+      final r = (yVal + (1.370705 * (v - 128))).clamp(0, 255).toInt();
+      final g = (yVal - (0.337633 * (u - 128)) - (0.698001 * (v - 128))).clamp(0, 255).toInt();
+      final b = (yVal + (1.732446 * (u - 128))).clamp(0, 255).toInt();
+
+      imgBuffer.setPixel(x, y, img.ColorRgb8(r, g, b));
+
+
+
+    }
+  }
+
+  return imgBuffer;
+}
+// up is te changes ------------------------------------------------------------------------------------------------
   Float32List _prepareInput(img.Image image) {
     const inputSize = 224;
     const mean = 127.5;

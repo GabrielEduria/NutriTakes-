@@ -103,22 +103,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Column(
         children: [
           // Orange header with 'Profile' text
-          Container(
-  width: double.infinity,
-  color: Colors.orange,
-  child: const Center(
-    child: Padding(
-      padding: EdgeInsets.all(24),
-      child: Text(
-        'Profile',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 22,
+        Container(
+            width: double.infinity,
+            color: Colors.orange,
+            child: const Padding(
+          padding: EdgeInsets.only(top: 40, bottom: 16), // Pushes text lower
+            child: Center(
+            child: Text(
+          'Profile',
+             style: TextStyle(
+             color: Colors.white,
+            fontSize: 22,
+                ),
+              ),
+            ),
+          ),
         ),
-      ),
-    ),
-  ),
-),
+
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
