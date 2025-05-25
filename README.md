@@ -1,16 +1,5 @@
 # csth_nutritakes
 
-A new Flutter project.
+A mobile application that uses image classification and a trained AI model to identify food items and provide real-time nutritional content analysis. Built with TensorFlow Lite and integrated into a mobile-friendly UI, it demonstrates practical application of computer vision, AI model deployment, and health-focused technology.",
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![nutritakes](https://github.com/user-attachments/assets/a55ac064-6a65-4b24-8202-ed340224afa9)
